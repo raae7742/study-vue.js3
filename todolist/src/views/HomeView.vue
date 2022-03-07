@@ -4,6 +4,8 @@
       <v-flex xs6 pa-2>
         <List
           :todoList="todoList"
+          @statusControl="statusControl"
+          @listDelete="listDelete"
         />
       </v-flex>
       <v-flex xs6 pa-2>
@@ -33,6 +35,12 @@
       listAdd(memo) {
         console.log("받았어!")
         this.todoList.push({memo: memo, status: "created"})
+      },
+      statusControl(index, status) {
+        this.todoList[index].status = status
+      },
+      listDelete(index) {
+        this.todoList.splice(index, 1)
       }
     }
   }
