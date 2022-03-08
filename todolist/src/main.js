@@ -6,14 +6,22 @@ import vuetify from './plugins/vuetify'
 
 //font-awesome
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCheck, faRefresh, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faRefresh, faTrashAlt, faEdit } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from  '@fortawesome/vue-fontawesome'
 
-library.add(faCheck, faRefresh, faTrashAlt)
+library.add(faCheck, faRefresh, faTrashAlt, faEdit)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.config.productionTip = false
+
+export const eventBus = new Vue({
+  methods: {
+    listEdit(memo, index) {
+      this.$emit('listEdit', memo, index)
+    }
+  }
+})
 
 new Vue({
   router,
