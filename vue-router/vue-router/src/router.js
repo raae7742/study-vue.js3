@@ -40,5 +40,13 @@ export default new Router({
         }
       ]
     },
+    {
+      path: '/redirect-me',
+      redirect: { name: 'users' }
+    },
+    {
+      path: '/*',
+      redirect: { name: 'home' }
+    }
   ]
 })
