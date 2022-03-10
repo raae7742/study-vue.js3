@@ -26,8 +26,12 @@
 
     <v-app-bar app>
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-
       <v-toolbar-title>Application</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-toolbar-items class="hidden-sm-and-down">
+        <v-btn v-if="isLogin">Welcome</v-btn>
+        <v-btn v-else router :to="{name: 'login'}">Log In</v-btn>
+      </v-toolbar-items>
     </v-app-bar>
 
     <v-main>
@@ -37,7 +41,11 @@
 </template>
 
 <script>
+  import { mapState } from "vuex"
   export default {
     data: () => ({ drawer: null }),
+    computed: {
+      ...mapState(['isLogin'])
+    }
   }
 </script>
