@@ -1,10 +1,12 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import router from '../router'
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    userInfo: null,
     allUsers: [
       { id:1, name:"hoza", email:"hoza@gmail.com", password:"123456" },
       { id:1, name:"lego", email:"lego@gmail.com", password:"234567" },
@@ -15,14 +17,20 @@ export default new Vuex.Store({
   getters: {},
   mutations: {
     // 로그인이 성공했을 때,
-    loginSuccess(state) {
+    loginSuccess(state, payload) {
       state.isLogin = true
       state.isLoginError = false
+      state.userInfo = payload
     },
     // 로그인이 실패했을 때,
     loginError(state) {
       state.isLogin = false
       state.isLoginError = true
+    },
+    logout(state) {
+      state.isLogin = false
+      state.isLoginError = false
+      state.userInfo = null
     }
   },
   actions: {
@@ -34,13 +42,16 @@ export default new Vuex.Store({
           if (user.email == loginObj.email) selectedUser = user
       })
 
-      selectedUser === null
-      ? commit('loginError')
-      : selectedUser.password !== loginObj.password
-          ? commit('loginError')
-          : commit('loginSuccess')
-      // 유저의 비밀번호와 입력한 비밀번호를 비교
-            
+      if (selectedUser === null || selectedUser.password !== loginObj.password)
+        commit('loginError')
+      else {
+        commit('loginSuccess', selectedUser)
+        router.push({ name: "mypage" })
+      }      
+    },
+    logout({ commit }) {
+      commit("logout")
+      router.push({ name: "home" })
     }
   },
   modules: {},
