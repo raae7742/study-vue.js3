@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import router from '../router'
+import axios from "axios"
 
 Vue.use(Vuex);
 
@@ -35,24 +36,47 @@ export default new Vuex.Store({
   },
   actions: {
     // 로그인 시도
-    login({state, commit }, loginObj){// eslint-disable-line no-unused-vars
-      // 전체 유저에서 이메일로 유저 찾기
-      let selectedUser = null
-      state.allUsers.forEach(user => {
-          if (user.email == loginObj.email) selectedUser = user
-      })
-
-      if (selectedUser === null || selectedUser.password !== loginObj.password)
-        commit('loginError')
-      else {
-        commit('loginSuccess', selectedUser)
-        router.push({ name: "mypage" })
-      }      
+    login({ dispatch },loginObj){
+      // 로그인 -> 토큰 반환
+      axios
+        .post("https://reqres.in/api/login", loginObj)
+        .then(res => {
+          let token = res.data.token
+          localStorage.setItem("access_token", token)
+          dispatch("getMemberInfo")
+        })
+        .catch(() => {
+          alert('이메일과 비밀번호를 확인하세요.')
+        })
     },
     logout({ commit }) {
       commit("logout")
       router.push({ name: "home" })
-    }
+    },
+    getMemberInfo({ commit }) {
+      let token = localStorage.getItem("access_token")
+      let config = {
+        headers: {
+          "access-token": token
+        }
+      }
+
+      // 토큰 -> 멤버 정보를 반환
+      axios
+        .get("https://reqres.in/api/users/2", config)
+        .then(response => {
+          let userInfo = {
+            id: response.data.data.id,
+            first_name: response.data.data.first_name,
+            last_name: response.data.data.last_name,
+            avatar: response.data.data.avatar,
+          }
+          commit('loginSuccess', userInfo)
+        })
+        .catch(() => {
+          alert('이메일과 비밀번호를 확인하세요.')
+        })
+      }
   },
   modules: {},
 });

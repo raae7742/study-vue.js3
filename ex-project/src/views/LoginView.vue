@@ -36,6 +36,8 @@
                             })">
                             로그인
                         </v-btn>
+
+                        <!-- <v-btn @click="test">테스트</v-btn> -->
                     </div>
                 </v-card>
             </v-flex>
@@ -44,7 +46,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex"// eslint-disable-line no-unused-vars
+import { mapState, mapActions } from "vuex"
 
 export default {
     data() {
@@ -57,7 +59,22 @@ export default {
         ...mapState(["isLogin", "isLoginError"])
     },
     methods: {
-        ...mapActions(["login"])
+        ...mapActions(["login"]),
+    //     test() {
+    //         axios
+    //             .get("https://reqres.in/api/users?page=2")
+    //             .then(res => {
+    //                 console.log(res)
+    //             })
+    //             .catch(err => {
+    //                 console.log(err)
+    //             })
+    //             .then(() => {
+
+    //             })
+            
+    //     }
+    // }
     }
 }
 </script>
